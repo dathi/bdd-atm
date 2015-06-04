@@ -1,7 +1,5 @@
 class Account
-  def initialize(amount)
-  	
-  end
+  
 end
 
 Given(/^I have deposited \$(\d+) in my account$/) do |amount|
