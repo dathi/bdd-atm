@@ -8,7 +8,21 @@ class Account
 end
 
 class Teller
+  def initialize(cash_slot)
+    @cash_slot = cash_slot
+  end
+
   def withdraw_from(account, amount)
+    @cash_slot.dispense(amount)
+  end
+end
+
+class CashSlot
+  def contents
+    @contents or raise("I'm empty!")
+  end
+  def dispense(amount)
+    @contents = amount
   end
 end
 
@@ -18,6 +32,9 @@ module KnowsMyDomain
   end
   def cash_slot
     @cash_slot ||= CashSlot.new
+  end
+  def teller
+    @teller = Teller.new(cash_slot)
   end
 end
 World(KnowsMyDomain)
@@ -32,10 +49,9 @@ Given(/^I have deposited (#{CAPTURE_CASH_AMOUNT}) in my account$/) do |amount|
 end
 
 When(/^I withdraw (#{CAPTURE_CASH_AMOUNT})$/) do |amount|
-  teller = Teller.new
   teller.withdraw_from(my_account, amount)
 end
 
-Then(/^\$(\d+) should be dispensed$/) do |amount|
-  cash_slot.content.should == amount
+Then(/^(#{CAPTURE_CASH_AMOUNT}) should be dispensed$/) do |amount|
+  cash_slot.contents.should == amount
 end
