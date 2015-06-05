@@ -7,11 +7,11 @@ class Account
   end
 end
 
-Transform /^\d+$/ do |number|
+CAPTURE_A_NUMBER = Transform /^\d+$/ do |number|
   number.to_i
 end
 
-Given(/^I have deposited \$(\d+) in my account$/) do |amount|
+Given(/^I have deposited \$(#{CAPTURE_A_NUMBER}) in my account$/) do |amount|
   my_account = Account.new
   my_account.deposit(amount)
   my_account.balance.should eq(amount), "Expected the balance to be #{amount} but it was #{my_account.balance}"
