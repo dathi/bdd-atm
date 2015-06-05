@@ -7,8 +7,8 @@ class Account
   end
 end
 
-CAPTURE_CASH_AMOUNT = Transform /^\$(\d+)$/ do |digits|
-  digits.to_i
+CAPTURE_CASH_AMOUNT = Transform /^(£|\$|€)(\d+)$/ do | currency_symbol, digits |
+  Currency::Money.new(digits, currency_symbol)
 end
 
 Given(/^I have deposited (#{CAPTURE_CASH_AMOUNT}) in my account$/) do |amount|
